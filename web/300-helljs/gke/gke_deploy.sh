@@ -3,7 +3,12 @@
 # stop on error
 set -e
 
-export PROJECT_ID=apt-theme-257401
+export PROJECT_ID=
+if [ -z "$PROJECT_ID" ]; then
+    echo "You have to set PROJECT_ID variable before you can run the provisioning script!"
+    exit 1
+fi
+
 CONTAINER_TAG="gcr.io/${PROJECT_ID}/hell_js"
 export FRONTEND_TAG="${CONTAINER_TAG}_frontend"
 export SECURE_BACKEND_TAG="${CONTAINER_TAG}_secure_backend"
