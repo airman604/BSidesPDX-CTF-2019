@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hell-js-vulnerable-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hell-js-vulnerable-backend
+  template:
+    metadata:
+      name: hell-js-vulnerable-backend
+      labels:
+        app: hell-js-vulnerable-backend
+    spec:
+      containers:
+        - name: hell-js-vulnerable-backend
+          image: $VULNERABLE_BACKEND_TAG:latest
+          imagePullPolicy: Always
+          securityContext:
+            privileged: false
+          ports:
+          - containerPort: 8080
+          env:
+          - name: JWT_SECRET
+            value: "$JWT_SECRET"
+          - name: MONGODB_URL
+            value: "mongodb://mongo:27017"
+          - name: MONGODB_DB_NAME
+            value: "helljs"
+          - name: PORT
+            value: "8080"
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: ocirsecret

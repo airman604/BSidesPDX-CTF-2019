@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hell-js-secure-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hell-js-secure-backend
+  template:
+    metadata:
+      name: hell-js-secure-backend
+      labels:
+        app: hell-js-secure-backend
+    spec:
+      containers:
+        - name: hell-js-secure-backend
+          image: $SECURE_BACKEND_TAG:latest
+          imagePullPolicy: Always
+          securityContext:
+            privileged: false
+          ports:
+          - containerPort: 8080
+          env:
+          - name: JWT_SECRET
+            value: "$JWT_SECRET"
+          - name: PORT
+            value: "8080"
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: ocirsecret

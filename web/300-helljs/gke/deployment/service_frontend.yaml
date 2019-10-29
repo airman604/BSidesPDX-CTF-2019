@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hell-js-frontend
+spec:
+  ports:
+   - port: 27330
+     targetPort: 8080
+  selector:
+    app: hell-js-frontend
+  type: LoadBalancer
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: hell-js-frontend
+spec:
+  podSelector:
+    matchLabels:
+      app: hell-js-frontend
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - ports:
+    - port: 8080
+    from: []

@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hell-js-vulnerable-backend
+spec:
+  ports:
+   - port: 27331
+     targetPort: 8080
+  selector:
+    app: hell-js-vulnerable-backend
+  type: LoadBalancer
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: hell-js-vulnerable-backend
+spec:
+  podSelector:
+    matchLabels:
+      app: hell-js-vulnerable-backend
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - ports:
+    - port: 8080
+    from: []
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+          - 169.254.169.254/32
+          - 10.96.0.1/32
+    ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+    - port: 27017
+      protocol: TCP

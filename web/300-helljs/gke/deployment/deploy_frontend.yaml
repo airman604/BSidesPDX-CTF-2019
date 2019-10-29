@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hell-js-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hell-js-frontend
+  template:
+    metadata:
+      name: hell-js-frontend
+      labels:
+        app: hell-js-frontend
+    spec:
+      containers:
+        - name: hell-js-frontend
+          image: $FRONTEND_TAG:latest
+          imagePullPolicy: Always
+          securityContext:
+            privileged: false
+          ports:
+          - containerPort: 8080
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: ocirsecret
